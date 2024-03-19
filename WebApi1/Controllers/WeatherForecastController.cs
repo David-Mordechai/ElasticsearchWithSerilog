@@ -18,9 +18,10 @@ namespace WebApi1.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
+        [HttpGet("GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            _logger.LogInformation("GetWeatherForecast api was hit...");
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
@@ -28,6 +29,19 @@ namespace WebApi1.Controllers
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToArray();
+        }
+
+        [HttpGet("ThrowException")]
+        public void ThrowException()
+        {
+            try
+            {
+                throw new Exception("Error in application");
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Something went wrong: {ErrorMessage}", e.Message);
+            }
         }
     }
 }
